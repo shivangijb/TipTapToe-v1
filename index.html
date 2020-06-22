@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tip Tap Toe</title>
+    <script src='./tiptaptoe.js'></script>
+    <!-- <script src='./TipTapToeClass.js'></script> -->
+    <link rel='stylesheet' href='tiptaptoe.css'>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <!-- Add image to the browser tab -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <audio autoplay=true loop=true preload=metadata>
+        <source src='./assets/music_sugarcookie.mp3' type="audio/mpeg">
+    </audio>
+    <!-- <audio id='audio-play' loop=true>
+        <source src='./assets/ocean.mp3' type="audio/mpeg">
+    </audio> -->
+    <div class='control-panel'>
+        <button class='menu' onclick='showMenu()' title='Show rules again'></button>
+        <button id='music' class='play' onclick='toggleMusic()' title='Control music'></button>
+        <button class='send-heart' onclick='sendHeart()' title='Send some love!'></button>
+        <!-- <label id='username-label'></label> -->
+    </div>
+    <div class='game'>
+        <nav class='left'>
+            <div id='intro'>
+                <!-- Make h1 non-selectable -->
+                <h1>Tip Tap Toe</h1>
+                <img class='tweeterimg bounce' src='./assets/tweeterbird.svg'/>
+                <div>
+                    <button onclick="showRules()">Rules</button>
+                </div>
+            </div>
+            <div id='rules' class='rules'>
+                <h2>Game rules</h2>
+                <ul>
+                    <li>You will see a grid with some fishes.</li>
+                    <li>They will stay for some time and then... Poof! Vanish.</li>
+                    <li>Your goal is to remember their locations.</li>
+                    <li>Select all the cells which had the fishes and click- GO!</li>
+                    <li>Honey, you can't afford to make too many mistakes!</li>
+                </ul>
+                <button id='rules-button' onclick="pickUsername()">Got it!</button>
+            </div>
+            <div id='username' class='username'>
+                <h2>What shall we call you?</h2>
+                <div>
+                    <label for="fname">Honorable-</label><br>
+                    <input id='fname' type='text' maxlength="30" autocomplete="off" spellcheck="false"></input>
+                </div>
+                <button onclick="showRules()">Back</button>
+                <button onclick="letsPlay()">Let's Play!</button>
+            </div>
+        </nav>
+        <div id='game-config' class='right'>
+            <div class='fish-swimming'>
+                <img src='./assets/tortoise.png' class='fish1 swim-right'>
+                <img src='./assets/fish5.png' class='fish2 swim-right'>
+                <img src='./assets/fish3.png' class='fish3 swim-left'>
+                <img src='./assets/fish2.png' class='fish4 swim-left'>
+                <img src='./assets/fish3inv.png' class='fish5 swim-right'>
+            </div>
+            <div class='fish-swimming'>
+                <img src='./assets/grass2.png' class='grass'>
+                <img src='./assets/grass2.png' class='grass' style='right:0%'>
+                <img src='./assets/bubbles.png' class='bubble1 float-up'>
+                <img src='./assets/bubbles.png' class='bubble2 float-up'>
+            </div>
+            <div class='game-board'>
+                <div class='left-list'>
+                    <ul>
+                        <li>Caught</li>
+                        <li id='caught-score'>0</li>
+                        <li>Missed</li>
+                        <li id='missed-score'>0</li>
+                    </ul>
+                </div>
+                <div id='center-play'>
+                    <!-- <checkbox-grid row='4' column='4'></checkbox-grid> -->
+                </div>
+                <div class='right-list'>
+                    <button onclick="submitAndNext()">Go</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script type="module" src="./LevelGenerator.js"></script> -->
+    <script src='./CheckboxGrid.js' async></script>
+</body>
+</html>
