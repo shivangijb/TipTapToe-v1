@@ -18,7 +18,7 @@ const COUNT_MAP = (function(){ //Map because - might want to add other attribute
     return countMap;
 })();
 
-const CURRENT_LEVEL = 1; //TODO: Is there anyway to get rid of these global variables
+let CURRENT_LEVEL = 1; //TODO: Is there anyway to get rid of these global variables
 
 const toggleMusic = function() {
     const bgm = $('audio')[0];
@@ -83,37 +83,123 @@ const letsPlay = function() {
     document.getElementsByClassName("fish-swimming")[0].classList.add("float");
     $(".float-up").hide();
 
-    $('.right-list').show("slow"); //button in this game
-    $('.left-list').show("slow"); //score in this game
+    $('.right-list').show({
+        start: function() {
+            $(this).css('display', 'flex');
+        }
+    }, "slow");
+    // $('.right-list').show("slow");
+    $('.left-list').show("slow"); 
 
     _startGame();
 }
 
 const _startGame = function() {
-    _showNextLevel();
+    _showNextLevel(CURRENT_LEVEL++);
 }
 
 const submitAndNext = function() {
-    const elem = document.querySelector('checkbox-grid');
-    elem.parentNode.removeChild(elem);
-
-    // _showNextLevel();
+    _showNextLevel(CURRENT_LEVEL++);
+    //TODO: reset timer - if applicable
 }
 
+const restartGame = function() {
+    CURRENT_LEVEL = 1;
+    _showNextLevel(CURRENT_LEVEL);
+    //TODO: reset scores 
+    //reset time - if applicable
+}
 /**
  * TODO: Move all Level-vise grid generator to a mixin
  */
-const  _showNextLevel = function() {
-    // const levelObj = new LevelGenerator(CURRENT_LEVEL, COUNT_MAP);
+const  _showNextLevel = function(level) {
+    //TODO: swoop in level indicator animation for the change of level
+
+    const elem = document.querySelector('checkbox-grid');
+    elem?.parentNode.removeChild(elem);
+
+    const levelObj = new _LevelGenerator(level, COUNT_MAP);   
+
     const grid = document.createElement('checkbox-grid');
-    grid.setAttribute('row', 4); //TODO: Customize
-    grid.setAttribute('column', 4); //TODO: Customize
+    grid.setAttribute('row', levelObj.gridSize); //TODO: Customize
+    grid.setAttribute('column', levelObj.gridSize); //TODO: Customize
     document.getElementById('center-play').appendChild(grid);
+
+    //TODO:
+    //add targetlocations display
+    //start timer
+    //hide after timer resolved
+    //store the current level locations
 
     document.getElementById("center-play").style.animation = "zoomin 1s 1";
     document.getElementById("center-play").style.visibility = "visible";
+    
+    _showTargetElements(levelObj);
+}
+
+const _showTargetElements = function(levelObj) {
+    const arr = levelObj.targetLocations;
+    const shadowRoot =document.querySelector('checkbox-grid').shadowRoot;
+    for(let i=0; i<arr.length; i++) {
+        //TODO:Change to image
+        shadowRoot.getElementById('gridid_'+arr[i]).style.backgroundColor = '#000';
+        // shadowRoot.getElementById('gridid_'+arr[i]).classList.add('cell-fish');
+    }
+    setTimeout(function(arr, root){
+        for(let i=0; i<arr.length; i++) {
+            //TODO:Change to image
+            root.getElementById('gridid_'+arr[i]).style.backgroundColor = '#4974c4';
+            // shadowRoot.getElementById('gridid_'+arr[i]).classList.remove('cell-fish');
+        }
+    }, levelObj.displayTime, arr, shadowRoot);
 }
 
 // const _cellClick = function() {
 //     console.log('cell clicked');
 // }
+
+const _LevelGenerator = function(level, targetMap) {
+    this.level = level;
+
+    const _getDisplayTime = () => {
+        if(this.level<=20) {
+            return Math.floor((this.level - 1)/4 + 1)*1000;
+        } else {
+            return 5000;
+        }
+    }
+
+    const _getGridSize = () => {
+        if(this.level <= 20) {
+            return Math.floor((this.level+1)/2 + 3);
+        } else {
+            return 14;
+        }
+    }
+
+    const _getNumberOfTarget = () => {
+        if(this.level<=20) {
+            return targetMap.get(this.level);
+        } else {
+            return 10;
+        }
+    }
+
+    const _getTargetLocations = () => {
+        let targetArr = [];
+        this.numberOfTarget = _getNumberOfTarget();
+        for(let i=0; i<this.numberOfTarget; i++) {
+            targetArr.push(_randomIntGenerator(this.gridSize*this.gridSize));
+        }
+        return targetArr.sort((a,b)=>a-b);
+    }
+    //Do i need to do this here, or can i just call the function with the then objscope
+    //what is the best practice
+    this.gridSize = _getGridSize();
+    this.targetLocations = _getTargetLocations();
+    this.displayTime = _getDisplayTime();
+}
+
+const _randomIntGenerator = function(limit) {
+    return Math.floor(Math.random()*limit);
+}

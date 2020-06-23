@@ -1,4 +1,4 @@
-export default class LevelGenerator {
+class LevelGenerator {
   constructor(level, targetMap) {
       this.level = level;
       this.targetMap = targetMap;
@@ -6,7 +6,7 @@ export default class LevelGenerator {
 
   get gridSize() {
       if(this.level <= 20) {
-          return (this.level+1)/2 + 3;
+          return Math.floor((this.level+1)/2 + 3);
       } else {
           return 14;
       }
@@ -14,7 +14,7 @@ export default class LevelGenerator {
 
   get timeForShow() { //returns in seconds
       if(this.level<=20) {
-          return (this.level - 1)/4 + 2;
+          return Math.floor((this.level - 1)/4 + 2);
       } else {
           return 6;
       }
@@ -40,3 +40,5 @@ export default class LevelGenerator {
       return Math.floor(Math.random()*limit);
   }
 }
+
+module.exports = LevelGenerator;
