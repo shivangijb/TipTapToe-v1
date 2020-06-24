@@ -12,10 +12,6 @@ template.innerHTML = `
             border: 1px solid #294374;
             cursor: pointer;
         }
-
-        .grid-cell:hover {
-            background-color: #71deff;
-        }
     </style>
     <div id='game-grid' class='game-grid'>
         
@@ -54,10 +50,6 @@ class CheckboxGrid extends HTMLElement {
         `;
         gamegrid.setAttribute('style', gridstyle);
     }
-
-    // _cellClick() {
-    //     console.log('cell clicked');
-    // }
 }
 
 window.customElements.define('checkbox-grid', CheckboxGrid);

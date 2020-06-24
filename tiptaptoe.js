@@ -1,24 +1,68 @@
-// const LevelGenerator = require('./LevelGenerator.js');
-const COUNT_MAP = (function(){ //Map because - might want to add other attributes to level later
-    const countMap = new Map();
-    for (let i=1; i<=8; i++) {
-        let count = i - Math.floor((i-1)/2);
-        countMap.set(i, count);
-    }
+const _manageCountMap = function() {
+    // const LevelGenerator = require('./LevelGenerator.js');
+    const COUNT_MAP = (function(){ //Map because - might want to add other attributes to level later
+        const countMap = new Map();
+        for (let i=1; i<=8; i++) {
+            let count = i - Math.floor((i-1)/2);
+            countMap.set(i, count);
+        }
 
-    for (let i=9; i<=16; i++) {
-        let count = i - Math.floor((i-1)/2) - 1;
-        countMap.set(i, count);
-    }
+        for (let i=9; i<=16; i++) {
+            let count = i - Math.floor((i-1)/2) - 1;
+            countMap.set(i, count);
+        }
 
-    for (let i=17; i<=20; i++) {
-        countMap.set(i, 10);
-    }
-    
-    return countMap;
-})();
+        for (let i=17; i<=20; i++) {
+            countMap.set(i, 10);
+        }
+        
+        return countMap;
+    })();
 
-let CURRENT_LEVEL = 1; //TODO: Is there anyway to get rid of these global variables
+    //getTargetCountFunction
+    return (level) => {
+        return COUNT_MAP.get(level);
+    }
+}
+
+const _manageScoreBoard = function() {
+    let SCORE_BOARD = {
+        missed: 0,
+        caught: 0
+    };
+
+    return {
+        getScore: () => {
+            return SCORE_BOARD;
+        },
+
+        incrementCaughtScore: () => {
+            ++SCORE_BOARD.caught;
+        },
+
+        incrementMissedScore: () => {
+            ++SCORE_BOARD.missed;
+        }
+    };
+}
+
+const _manageLevelCount = function() {
+    let CURRENT_LEVEL = 0; //TODO: Is there anyway to get rid of these global variables
+    return {
+        incrementLevel: () => {
+            return ++CURRENT_LEVEL;
+        },
+
+        resetLevel: () => {
+            CURRENT_LEVEL = 1;
+            return CURRENT_LEVEL;
+        }
+    };
+}
+
+const getTargetCount = _manageCountMap();
+const scoreBoardFactory = _manageScoreBoard();
+const updateLevelFactory = _manageLevelCount();
 
 const toggleMusic = function() {
     const bgm = $('audio')[0];
@@ -59,7 +103,7 @@ const pickUsername = function() {
 const letsPlay = function() {
     const nameField = document.getElementById('fname');
     if(!nameField.value) {
-        nameField.style.animation = 'highlightcell 0.8s 2';
+        nameField.style.animation = 'highlightcell 0.6s 2';
         return;
     }
     // document.getElementById('username-label').innerText = nameField.value;
@@ -95,17 +139,16 @@ const letsPlay = function() {
 }
 
 const _startGame = function() {
-    _showNextLevel(CURRENT_LEVEL++);
+    _showNextLevel(updateLevelFactory.incrementLevel());
 }
 
 const submitAndNext = function() {
-    _showNextLevel(CURRENT_LEVEL++);
+    _showNextLevel(updateLevelFactory.incrementLevel());
     //TODO: reset timer - if applicable
 }
 
 const restartGame = function() {
-    CURRENT_LEVEL = 1;
-    _showNextLevel(CURRENT_LEVEL);
+    _showNextLevel(updateLevelFactory.resetLevel());
     //TODO: reset scores 
     //reset time - if applicable
 }
@@ -114,11 +157,17 @@ const restartGame = function() {
  */
 const  _showNextLevel = function(level) {
     //TODO: swoop in level indicator animation for the change of level
+    
+    //TODO: while disabling GO btn - mildly change the styling
+    {
+        document.getElementById('go-btn').disabled = true;
+        document.getElementById('go-btn').style.opacity = 0.5;
+    }
 
     const elem = document.querySelector('checkbox-grid');
     elem?.parentNode.removeChild(elem);
 
-    const levelObj = new _LevelGenerator(level, COUNT_MAP);   
+    const levelObj = new _LevelGenerator(level, getTargetCount);   
 
     const grid = document.createElement('checkbox-grid');
     grid.setAttribute('row', levelObj.gridSize); //TODO: Customize
@@ -131,7 +180,7 @@ const  _showNextLevel = function(level) {
     //hide after timer resolved
     //store the current level locations
 
-    document.getElementById("center-play").style.animation = "zoomin 1s 1";
+    document.getElementById("center-play").style.animation = "zoomin 0.8s 1";
     document.getElementById("center-play").style.visibility = "visible";
     
     _showTargetElements(levelObj);
@@ -151,6 +200,12 @@ const _showTargetElements = function(levelObj) {
             root.getElementById('gridid_'+arr[i]).style.backgroundColor = '#4974c4';
             // shadowRoot.getElementById('gridid_'+arr[i]).classList.remove('cell-fish');
         }
+
+        //TODO: if styling change applied then revert the styling
+        {
+            document.getElementById('go-btn').disabled = false;
+            document.getElementById('go-btn').style.opacity = 1;
+        }
     }, levelObj.displayTime, arr, shadowRoot);
 }
 
@@ -158,7 +213,7 @@ const _showTargetElements = function(levelObj) {
 //     console.log('cell clicked');
 // }
 
-const _LevelGenerator = function(level, targetMap) {
+const _LevelGenerator = function(level, targetMapFn) {
     this.level = level;
 
     const _getDisplayTime = () => {
@@ -179,7 +234,7 @@ const _LevelGenerator = function(level, targetMap) {
 
     const _getNumberOfTarget = () => {
         if(this.level<=20) {
-            return targetMap.get(this.level);
+            return targetMapFn(this.level);
         } else {
             return 10;
         }
