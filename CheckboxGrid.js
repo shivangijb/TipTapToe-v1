@@ -7,10 +7,62 @@ template.innerHTML = `
             height: 100%;
             border: 1px solid #294374;
         }
+
         .grid-cell {
             box-sizing: border-box;
             border: 1px solid #294374;
             cursor: pointer;
+        }
+
+        .cell-image {
+            background-size: contain;
+            z-index: 10;
+            background-repeat: no-repeat;
+            vertical-align: middle;
+        }
+
+        .cell-fish-1 {
+            background-image: url('./assets/fishIcon.png');
+        }
+
+        .cell-fish-2 {
+            background-image: url('./assets/fishIcon_clown.png');
+        }
+
+        .cell-fish-3 {
+            background-image: url('./assets/fishIcon_octopus.png');
+        }
+
+        .cell-fish-4 {
+            background-image: url('./assets/fishIcon_yelblue.png');
+        }
+
+        .cell-fish-5 {
+            background-image: url('./assets/fishIcon_seahorse.png');
+        }
+
+        .cell-fish-6 {
+            background-image: url('./assets/fishIcon_whale.png');
+        }
+
+        .cell-fish-7 {
+            background-image: url('./assets/fishIcon_Jelly.png');
+        }
+
+        .cell-catch {
+            background-image: url('./assets/peanuts.png');
+        }
+
+        .cell-correct {
+            background-image: url('./assets/check.png');
+        }
+
+        .cell-wrong {
+            background-image: url('./assets/cross.png');
+        }
+
+        .cell-missed {
+            background-image: url('./assets/double-exclamation.png');
         }
     </style>
     <div id='game-grid' class='game-grid'>
@@ -38,10 +90,9 @@ class CheckboxGrid extends HTMLElement {
         const gamegrid = this.shadowRoot.getElementById('game-grid');
         for (let i=0; i<this.row*this.column; i++) {
             let el = document.createElement("DIV");
-            el.setAttribute('class', 'grid-cell');
+            el.setAttribute('class', 'grid-cell cell-image');
             el.setAttribute('id', 'gridid_'+i);
-            // el.setAttribute('onclick', '_cellClick()');
-            // el.addEventListener('click', this._cellClick.bind(this));
+            el.setAttribute('onclick', 'cellClick(this)');
             gamegrid.appendChild(el);
         }
         const gridstyle=`

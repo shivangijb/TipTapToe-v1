@@ -13,13 +13,11 @@
 </head>
 <body>
     <audio autoplay=true loop=true preload=metadata>
-        <source src='./assets/music_sugarcookie.mp3' type="audio/mpeg">
-    </audio>
-    <!-- <audio id='audio-play' loop=true>
         <source src='./assets/ocean.mp3' type="audio/mpeg">
-    </audio> -->
+        <!-- <source src='./assets/music_sugarcookie.mp3' type="audio/mpeg"> -->
+    </audio>
     <div class='control-panel'>
-        <button class='menu' onclick='showMenu()' title='Show rules again'></button>
+        <button class='menu' onclick='showLeaderboard()' title='View Leaderboard'></button>
         <button id='music' class='play' onclick='toggleMusic()' title='Control music'></button>
         <button class='send-heart' onclick='sendHeart()' title='Send some love!'></button>
         <!-- <label id='username-label'></label> -->
@@ -27,7 +25,6 @@
     <div class='game'>
         <nav class='left'>
             <div id='intro'>
-                <!-- Make h1 non-selectable -->
                 <h1>Tip Tap Toe</h1>
                 <img class='tweeterimg bounce' src='./assets/tweeterbird.svg'/>
                 <div>
@@ -37,10 +34,10 @@
             <div id='rules' class='rules'>
                 <h2>Game rules</h2>
                 <ul>
-                    <li>You will see a grid with some fishes.</li>
-                    <li>They will stay for some time and then... Poof! Vanish.</li>
-                    <li>Your goal is to remember their locations.</li>
-                    <li>Select all the cells which had the fishes and click- GO!</li>
+                    <li>You will see a tank with some fishes.</li>
+                    <li>They stay for a while asking food and then... Poof! Vanish.</li>
+                    <li>Your goal is to remember their locations and feed them peanuts.</li>
+                    <li>Select all the cells which had fishes and click- GO!</li>
                     <li>Honey, you can't afford to make too many mistakes!</li>
                 </ul>
                 <button id='rules-button' onclick="pickUsername()">Got it!</button>
@@ -75,6 +72,8 @@
                         <li>Caught</li>
                         <li id='caught-score'>0</li>
                         <li>Missed</li>
+                        <li id='missed-score'>0</li>
+                        <li>High Score</li>
                         <li id='missed-score'>0</li>
                     </ul>
                 </div>

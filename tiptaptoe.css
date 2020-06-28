@@ -121,7 +121,7 @@ body {
 }
 
 .rules ul {
-    font-size: 2vw;
+    font-size: 1.8vw;
     text-align: left;
     margin: 0 15%;
 }
@@ -303,12 +303,4 @@ body {
 /* button active */
 .right button:active {
     background-color: #2c3d61;
-}
-
-.cell-fish {
-    background-image: url('./assets/fishIcon_clown.png');
-    background-size: contain;
-    z-index: 10;
-    background-repeat: no-repeat;
-    vertical-align: middle;
 }
