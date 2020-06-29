@@ -12,13 +12,13 @@ template.innerHTML = `
             box-sizing: border-box;
             border: 1px solid #294374;
             cursor: pointer;
+            background-position: center;
         }
 
         .cell-image {
             background-size: contain;
             z-index: 10;
             background-repeat: no-repeat;
-            vertical-align: middle;
         }
 
         .cell-fish-1 {

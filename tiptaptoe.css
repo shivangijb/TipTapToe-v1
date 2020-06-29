@@ -31,8 +31,41 @@ body {
     background-color: #000;
 }
 
-.control-panel label {
-    text-align: end;
+.player-avatar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    margin: 10px;
+    display: none;
+    align-items: center;
+}
+
+.player-name {
+    color: '#000';
+    margin-right: 10px;
+    font-size: 1.8vw;
+}
+
+.player-icon {
+    width: 3vw;
+    height: 3vw;
+    background-image: url('./assets/fish1inv.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    padding: 5px;
+}
+
+.game-level {
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+    left: 50%;
+    margin-bottom: 15px;
+    display: none;
+    color: #000;
+    font-size: 2vw;
 }
 
 .play {
@@ -97,7 +130,6 @@ body {
     100% { transform:  scale(1,1) translateY(0); }
 }
 
-/* button */
 .left button {
     font-size: 2vw;
     font-family: 'Luckiest Guy', cursive;
@@ -107,7 +139,7 @@ body {
     cursor: pointer;
     border-radius: 2vmin;
 }
-/* button active */
+
 .left button:active {
     background-color: #294374;
 }
@@ -312,7 +344,7 @@ body {
 
 .consolation-text {
     text-align:center; 
-    color:#112079; 
+    color:#1f043b; 
     align-content: center;
     margin: 20px 40px;
 }

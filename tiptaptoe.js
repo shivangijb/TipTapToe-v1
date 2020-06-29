@@ -184,12 +184,12 @@ const toggleMusic = function() {
 
 //TODO: Implement ajax call to the backend to submit like
 const sendHeart = function() {
-
+    //put request backend call
 }
 
 //TODO: show window with leaderboard scores
 const showLeaderboard = function() {
-
+    //get request backend call
 }
 
 const showRules = function() {
@@ -203,17 +203,24 @@ const pickUsername = function() {
     $('#username').show("slow");
 }
 
+const _updatePlayerAvatar = function(name) {
+    const avatar=document.getElementsByClassName('player-avatar')[0];
+    avatar.style.display='flex';
+    avatar.children[0].innerText=name;
+
+    //TODO: store username to backend for leaderboard
+    //associate username with pc ip adress or browser cookie may be?
+}
+
 const letsPlay = function() {
     const nameField = document.getElementById('fname');
     if(!nameField.value) {
         nameField.style.animation = 'highlightcell 0.6s 2';
         return;
-    }
-    // Show user name: document.getElementById('username-label').innerText = nameField.value;
+    }    
+    _updatePlayerAvatar(nameField.value);
     
-    //TODO: storeName to backend for leaderboard
-    //TODO: Change music
-
+    $('.game-level').show();
     $(".left").animate({
         width: "0%"
     }, "slow");
@@ -286,12 +293,11 @@ const restartGame = function() {
     scoreBoardFactory.resetScore();
     _displayUpdatedScores();
 }
-/**
- * TODO: Move all Level-vise grid generator to a mixin
- */
+
 const  _showNextLevel = function(level) {
     //TODO: swoop in level indicator animation for the change of level
-    
+    document.getElementById('game-level-num').innerText = manageLevelFactory.getLevel();
+
     //TODO: DISABLE CLICKING ON THE GRID
     {
         document.getElementById('go-btn').disabled = true;
@@ -352,6 +358,8 @@ const _displayUpdatedScores = function() {
 }
 
 const _gameOver = function() {
+    $(".float-up").show();
+
     const elem = document.querySelector('checkbox-grid');
     elem?.parentNode.removeChild(elem);
     const consolationText = `
@@ -366,7 +374,8 @@ const _gameOver = function() {
             <img src='./assets/fishIcon_yelblue.png' style='animation-delay:8s' class='fish-last swim-right'>
         </div>
     `;
-    document.getElementById('center-play').innerHTML= consolationText;
+    //TODO: Amend the fish animation
+    document.getElementById('center-play').innerHTML += consolationText;
 
     {
         document.getElementById('go-btn').disabled=true;  
@@ -376,15 +385,19 @@ const _gameOver = function() {
 
     _setHighScore(scoreBoardFactory.getScore().caught);
     document.getElementById('high-score').innerText = localStorage.tipTapToeHighScore;
-            //send love
-            //open leaderboard
 }
 
 const _setHighScore = function(score) {
-    let highScore = localStorage['tipTapToeHighScore'];
-    if (!highScore) {
+    let highScore = +localStorage['tipTapToeHighScore'];
+    if (!highScore || (highScore < score)) {
         localStorage['tipTapToeHighScore'] = score;
-    } else if (+highScore < score) {
-        localStorage.tipTapToeHighScore = score;
+        //TODO: backend call to save the new 
+        
+        //TODO: show confetti for highscore
+        const newHighScore = `
+            <br><h2 class='consolation-text'>
+                But dance away, you hit a NEW HIGHSCORE!
+            </h2>`;
+        document.getElementById('center-play').innerHTML+=newHighScore;
     }
 }
