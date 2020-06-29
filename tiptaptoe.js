@@ -110,7 +110,9 @@ const _LevelGenerator = function(level, targetMapFn) {
     this.level = level;
 
     const _getDisplayTime = () => {
-        if(this.level<=6) {
+        if (this.level==1) {
+            return 1200;
+        } else if(this.level<=6) {
             return Math.floor((this.level - 1)/4 + 1)*800;
         } else if (this.level < 14) {
             return Math.floor((this.level - 1)/4 + 1)*500;
