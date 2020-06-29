@@ -166,6 +166,11 @@ body {
     animation-duration: 35s;
 }
 
+.fish-last {
+    z-index: 1;
+    animation-duration: 20s;
+}
+
 .grass {
     bottom: 0%;
 }
@@ -303,4 +308,11 @@ body {
 /* button active */
 .right button:active {
     background-color: #2c3d61;
+}
+
+.consolation-text {
+    text-align:center; 
+    color:#112079; 
+    align-content: center;
+    margin: 20px 40px;
 }

@@ -158,7 +158,7 @@ const _cellStyleCount = function() {
     return () => {
         count = count%7+1;
         return count;
-    }
+    };
 }
 
 const getTargetCount = _manageCountMap();
@@ -238,6 +238,7 @@ const letsPlay = function() {
 
     $('.left-list').show("slow"); 
 
+    document.getElementById('high-score').innerText = localStorage.tipTapToeHighScore ? localStorage.tipTapToeHighScore : 0;
     _startGame();
 }
 
@@ -247,12 +248,16 @@ const _startGame = function() {
 
 const submitAndNext = function() {
     const validationStat = manageLevelFactory.validateSelection();
-    scoreBoardFactory.incrementMissedScore(validationStat.targetMissed.length);
+    scoreBoardFactory.incrementMissedScore(validationStat.targetMissed.length+validationStat.targetWrong.length);
     scoreBoardFactory.incrementCaughtScore(validationStat.targetCorrect.length);
     _displayValidationStat(validationStat);
     _displayUpdatedScores();
+
     setTimeout(()=>{
-        _showNextLevel(manageLevelFactory.incrementLevel());
+        if (scoreBoardFactory.getScore().missed>10) {
+            _gameOver();
+        } else
+            _showNextLevel(manageLevelFactory.incrementLevel());
     },1500);
 }
 
@@ -272,6 +277,11 @@ const _displayValidationStat = function(validationStat) {
 }
 
 const restartGame = function() {
+    {
+        document.getElementById('go-btn').disabled=false;   
+        document.getElementById('go-btn').style.opacity = 1;   
+        document.getElementById('center-play').innerHTML='';
+    }  
     _showNextLevel(manageLevelFactory.resetLevel());
     scoreBoardFactory.resetScore();
     _displayUpdatedScores();
@@ -339,4 +349,42 @@ const _displayUpdatedScores = function() {
     const score = scoreBoardFactory.getScore();
     document.getElementById('caught-score').innerText=score.caught;
     document.getElementById('missed-score').innerText=score.missed;
+}
+
+const _gameOver = function() {
+    const elem = document.querySelector('checkbox-grid');
+    elem?.parentNode.removeChild(elem);
+    const consolationText = `
+        <h2 class='consolation-text'>
+            Well tried!<br>
+            But you starved more than 10 of our fishes.<br>
+            Try again maybe?? Remember harder this time!
+        </h2>
+        <div>
+            <img src='./assets/fishIcon_yelblue.png' class='fish-last swim-right'>
+            <img src='./assets/fishIcon_yelblue.png' style='animation-delay:4s' class='fish-last swim-right'>
+            <img src='./assets/fishIcon_yelblue.png' style='animation-delay:8s' class='fish-last swim-right'>
+        </div>
+    `;
+    document.getElementById('center-play').innerHTML= consolationText;
+
+    {
+        document.getElementById('go-btn').disabled=true;  
+        document.getElementById('go-btn').style.opacity = 0.5;
+        document.getElementById('re-btn').style.animation = 'highlightcell 0.6s 2';
+    }
+
+    _setHighScore(scoreBoardFactory.getScore().caught);
+    document.getElementById('high-score').innerText = localStorage.tipTapToeHighScore;
+            //send love
+            //open leaderboard
+}
+
+const _setHighScore = function(score) {
+    let highScore = localStorage['tipTapToeHighScore'];
+    if (!highScore) {
+        localStorage['tipTapToeHighScore'] = score;
+    } else if (+highScore < score) {
+        localStorage.tipTapToeHighScore = score;
+    }
 }
