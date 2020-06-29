@@ -284,6 +284,7 @@ const _displayValidationStat = function(validationStat) {
 }
 
 const restartGame = function() {
+    $(".float-up").hide();
     {
         document.getElementById('go-btn').disabled=false;   
         document.getElementById('go-btn').style.opacity = 1;   
