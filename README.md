@@ -6,3 +6,6 @@ Game Rules:
 3. Your goal is to remember their locations and feed them peanuts.
 4. Select all the cells which had fishes and click- GO!
 5. Honey, you can't afford to make too many mistakes!
+
+
+Heyaa!! Shivangi here!!
